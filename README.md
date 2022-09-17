@@ -24,3 +24,11 @@ Collection of LeetCode questions to ace the coding interview! - Created using [L
 - 그리고 `nums[]`에 숫자가 하나만 있을 경우, 값을 바로 리턴할 수 있도록 로직을 작성했는데 `nums[startIdx] * mulipliers[i]`가 아닌 `nums[startIdx]`만 리턴해주도록 구현 실수를 해서 한번 틀렸다.
 
   아마 오답 테스트케이스를 볼 수 없었다면 해결하는데 시간이 꽤 걸렸을 것 같다.
+
+<br>
+
+### [336. Palindrome Pairs](https://leetcode.com/problems/palindrome-pairs/submissions/)
+
+- Trie 자료 구조를 모르는 상태로 풀다가 도저히 시간초과를 해결할 수가 없어서 풀이를 참고해서 해결했다.
+
+  https://leetcode.com/problems/palindrome-pairs/discuss/79195/O(n-*-k2)-java-solution-with-Trie-structure
