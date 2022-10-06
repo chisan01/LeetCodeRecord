@@ -1,40 +1,34 @@
 class TimeMap {
-
-    private class ValueWithTimestamp {
-        public String value;
-        int timestamp;
-
-        public ValueWithTimestamp(String value, int timestamp) {
-            this.value = value;
-            this.timestamp = timestamp;
-        }
-    }
-
-    private Map<String, List<ValueWithTimestamp>> valuesOfKey;
-
+    HashMap<String, HashMap<Integer, String>> keyTimeMap;
     public TimeMap() {
-        valuesOfKey = new HashMap<>();
+        keyTimeMap = new HashMap<String, HashMap<Integer, String>>();
     }
-
+    
     public void set(String key, String value, int timestamp) {
-        if(!valuesOfKey.containsKey(key)) valuesOfKey.put(key, new ArrayList<>());
-        valuesOfKey.get(key).add(new ValueWithTimestamp(value, timestamp));
-    }
-
-    public String get(String key, int timestamp) {
-        if (!valuesOfKey.containsKey(key)) return "";
-
-        List<ValueWithTimestamp> values = this.valuesOfKey.get(key);
-
-        if (values.get(0).timestamp > timestamp) return "";
-
-        int L = 0, R = values.size() - 1;
-        while (L < R) {
-            int mid = (L + R + 1) / 2;
-            if (values.get(mid).timestamp <= timestamp) L = mid;
-            else R = mid - 1;
+        // If the 'key' does not exist in map.
+        if (!keyTimeMap.containsKey(key)) {
+            keyTimeMap.put(key, new HashMap<Integer, String>());
         }
-
-        return values.get(R).value;
+        
+        // Store '(timestamp, value)' pair in 'key' bucket.
+        keyTimeMap.get(key).put(timestamp, value);
+    }
+    
+    public String get(String key, int timestamp) {
+        // If the 'key' does not exist in map we will return empty string.
+        if (!keyTimeMap.containsKey(key)) {
+            return "";
+        }
+        
+        // Iterate on time from 'timestamp' to '1'.
+        for (int currTime = timestamp; currTime >= 1; --currTime) {
+            // If a value for current time is stored in key's bucket we return the value.
+            if (keyTimeMap.get(key).containsKey(currTime)) {
+                return keyTimeMap.get(key).get(currTime);
+            }
+        }
+        
+        // Otherwise no time <= timestamp was stored in key's bucket.
+        return ""; 
     }
 }
