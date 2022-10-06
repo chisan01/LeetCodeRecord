@@ -17,22 +17,21 @@ class TimeMap {
     }
 
     public void set(String key, String value, int timestamp) {
-        List<ValueWithTimestamp> values = this.valuesOfKey.getOrDefault(key, new ArrayList<>());
-        values.add(new ValueWithTimestamp(value, timestamp));
-        valuesOfKey.put(key, values);
+        if(!valuesOfKey.containsKey(key)) valuesOfKey.put(key, new ArrayList<>());
+        valuesOfKey.get(key).add(new ValueWithTimestamp(value, timestamp));
     }
 
     public String get(String key, int timestamp) {
-        if(!valuesOfKey.containsKey(key)) return "";
+        if (!valuesOfKey.containsKey(key)) return "";
 
         List<ValueWithTimestamp> values = this.valuesOfKey.get(key);
 
-        if(values.get(0).timestamp > timestamp) return "";
+        if (values.get(0).timestamp > timestamp) return "";
 
         int L = 0, R = values.size() - 1;
-        while(L < R) {
+        while (L < R) {
             int mid = (L + R + 1) / 2;
-            if(values.get(mid).timestamp <= timestamp) L = mid;
+            if (values.get(mid).timestamp <= timestamp) L = mid;
             else R = mid - 1;
         }
 
