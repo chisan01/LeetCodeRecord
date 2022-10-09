@@ -1,12 +1,10 @@
-import java.util.*;
-
 class Solution {
 
     TreeNode root;
 
-    public Optional<TreeNode> find(TreeNode cur, int num) {
-        if (cur == null) return Optional.empty();
-        if (cur.val == num) return Optional.of(cur);
+    public boolean find(TreeNode cur, int num) {
+        if (cur == null) return false;
+        if (cur.val == num) return true;
         else if (cur.val < num) return find(cur.right, num);
         else return find(cur.left, num);
     }
@@ -14,8 +12,7 @@ class Solution {
     public boolean searchAll(TreeNode cur, int targetSum) {
         if (cur == null) return false;
 
-        Optional<TreeNode> treeNode = find(root, targetSum - cur.val);
-        if (treeNode.isPresent() && treeNode.get() != cur) {
+        if ((cur.val * 2 != targetSum) && find(root, targetSum - cur.val)) {
             return true;
         } else {
             if (searchAll(cur.left, targetSum)) return true;
