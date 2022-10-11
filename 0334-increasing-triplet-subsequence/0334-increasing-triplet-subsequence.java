@@ -11,18 +11,17 @@ class Solution {
             if (curNum > longestIncreaseSubarray.get(longestIncreaseSubarray.size() - 1)) {
                 longestIncreaseSubarray.add(curNum);
             } else {
-                for (int j = 0; j < longestIncreaseSubarray.size(); j++) {
-                    if (curNum > longestIncreaseSubarray.get(j)) continue;
-                    if (curNum == longestIncreaseSubarray.get(j)) break;
-
-                    longestIncreaseSubarray.set(j, curNum);
-                    break;
+                int L = 0, R = longestIncreaseSubarray.size() - 1;
+                while(L < R) {
+                    int mid = (L+R)/2;
+                    if(curNum > longestIncreaseSubarray.get(mid)) L = mid + 1;
+                    else R = mid;
                 }
+                
+                if(longestIncreaseSubarray.get(L) <= curNum) continue;
+                longestIncreaseSubarray.set(L, curNum);
             }
             
-            // longestIncreaseSubarray.forEach(a -> System.out.print(a + " "));
-            // System.out.println();
-
             if (longestIncreaseSubarray.size() >= 3) {
                 return true;
             }
