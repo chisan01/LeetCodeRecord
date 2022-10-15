@@ -28,7 +28,7 @@ class Solution {
                     if (s.charAt(L-1) == s.charAt(R-1)) sameCharCnt++;
                     else differentCharCnt++;
 
-                    if(differentCharCnt > delCnt) continue;
+                    if(differentCharCnt > delCnt) break;
 
                     dp[R][delCnt] = Math.min(
                             dp[R][delCnt],
