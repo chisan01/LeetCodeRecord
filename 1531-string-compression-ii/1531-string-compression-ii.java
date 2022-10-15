@@ -22,7 +22,7 @@ class Solution {
 
         for (int R = 1; R <= s.length(); R++) {
             for (int delCnt = 0; delCnt <= maxDelCnt; delCnt++) {
-                // keep s[lastIdx]
+                // keep s[R - 1]
                 int sameCharCnt = 0, differentCharCnt = 0;
                 for (int L = R; L >= 1; L--) {
                     if (s.charAt(L-1) == s.charAt(R-1)) sameCharCnt++;
@@ -36,7 +36,7 @@ class Solution {
                     );
                 }
 
-                // delete s[lastIdx]
+                // delete s[R - 1]
                 if(delCnt == 0) continue;
                 dp[R][delCnt] = Math.min(dp[R][delCnt], dp[R - 1][delCnt - 1]);
             }
