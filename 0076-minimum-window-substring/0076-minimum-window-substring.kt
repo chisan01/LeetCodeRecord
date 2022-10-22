@@ -1,44 +1,49 @@
 class Solution {
 
     fun minWindow(s: String, t: String): String {
+        if(s.length < t.length || s.isEmpty()) return "";
 
-        val map = mutableMapOf<Char, Int>()
+        val hashMap = mutableMapOf<Char, Int>()
         for (ch in t) {
-            map[ch] = map.getOrDefault(ch, 0) + 1
+            hashMap[ch] = hashMap.getOrDefault(ch, 0) + 1
         }
 
-        var left = 0
         var minLeft = 0
-        var minLen = s.length + 1
-        var numOfCharInT = 0
+        var minRight = 987654321
 
+        var left = 0
+        var numOfCharInT = 0
         for (right in s.indices) {
             val curCh = s[right]
-            if (!map.containsKey(curCh)) continue
+            if (!hashMap.containsKey(curCh)) continue
 
             // is s.substring(left, right+1) window substring?
-            map[curCh] = map[curCh]!! - 1
-            if (map[curCh]!! >= 0) numOfCharInT++
+            hashMap[curCh] = hashMap[curCh]!! - 1
+            if (hashMap[curCh]!! >= 0) numOfCharInT++
+            if (numOfCharInT != t.length) continue
 
             // find min value of left
-            while (numOfCharInT == t.length) {
-                // update minRight, minLeft
-                if(right - left + 1 < minLen) {
-                    minLeft = left
-                    minLen = right - left + 1
+            while (left < s.length) {
+                if (!hashMap.containsKey(s[left])) {
+                    left++
+                    continue
                 }
-                
-                if (map.containsKey(s[left])) {
-                    map[s[left]] = map[s[left]]!! + 1
-                    if(map[s[left]]!! > 0) {
-                        numOfCharInT--
-                    }
+                if (hashMap[s[left]]!! < 0) {
+                    hashMap[s[left]] = hashMap[s[left]]!! + 1
+                    left++
+                    continue
                 }
-                left++
+                break;
+            }
+
+            // update minRight, minLeft
+            if (minRight - minLeft > right - left) {
+                minLeft = left;
+                minRight = right;
             }
         }
 
-        if (minLen > s.length) return ""
-        return s.substring(minLeft, minLeft + minLen)
+        if (minRight == 987654321) return ""
+        return s.substring(minLeft, minRight + 1)
     }
 }
