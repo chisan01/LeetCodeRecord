@@ -1,7 +1,6 @@
 class Solution {
 
     fun minWindow(s: String, t: String): String {
-        if(s.length < t.length || s.isEmpty()) return "";
 
         val map = mutableMapOf<Char, Int>()
         for (ch in t) {
