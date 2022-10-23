@@ -1,8 +1,8 @@
 class Solution {
     fun findErrorNums(nums: IntArray): IntArray {
-        val set = mutableSetOf<Int>()
         
         var duplicateNum = 0
+        val set = mutableSetOf<Int>()
         for(num in nums) {
             if(set.contains(num)) duplicateNum = num
             else set.add(num)
