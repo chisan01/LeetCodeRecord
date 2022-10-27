@@ -68,9 +68,9 @@ class Solution {
 
         for (i in 0 until n) {
             val slidingDown = image1.slidingDown(i)
-            println("slidingDown $i: \n$slidingDown")
+            // println("slidingDown $i: \n$slidingDown")
             val slidingUp = image1.slidingUp(i)
-            println("slidingUp $i: \n$slidingUp")
+            // println("slidingUp $i: \n$slidingUp")
             for (j in 0 until n) {
                 result = max(result, slidingDown.slidingLeft(j).overlap(image2))
                 result = max(result, slidingDown.slidingRight(j).overlap(image2))
