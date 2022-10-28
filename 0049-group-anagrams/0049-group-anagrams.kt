@@ -12,10 +12,5 @@ class Solution {
 }
 
 fun String.compact(): String {
-    val cnts = MutableList<Int>('z' - 'a' + 1) { 0 }
-    forEach { cnts[it - 'a']++ }
-    return cnts.withIndex().joinToString(" ") {
-        if(it.value == 0) ""
-        else "" + ('a' + it.index) + it.value
-    }
+    return toCharArray().sortedArray().joinToString("")
 }
