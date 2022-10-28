@@ -3,9 +3,9 @@ import java.util.PriorityQueue
 class Solution {
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
         val map = mutableMapOf<String, MutableList<String>>()
-        for (str in strs) {
-            val key = str.compact()
-            map[key] = map.getOrDefault(key, mutableListOf()).apply { add(str) }
+        strs.forEach {
+            val key = it.compact()
+            map[key] = map.getOrDefault(key, mutableListOf()).apply { add(it) }
         }
         return map.values.toList()
     }
