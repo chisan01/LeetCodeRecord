@@ -2,25 +2,18 @@ import java.util.PriorityQueue
 
 class Solution {
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
-        val pq = PriorityQueue<Pair<String, Int>>(compareBy { it.first })
-        for (i in strs.indices) {
-            pq.add(strs[i].compact() to i)
+
+        val map = mutableMapOf<String, MutableList<String>>()
+        for (str in strs) {
+            val key = str.compact()
+            map[key] = map.getOrDefault(key, mutableListOf())
+                .apply { add(str) }
         }
 
         val result = mutableListOf<List<String>>()
-        val group = mutableListOf<String>()
-        var curStr: String? = null
-        while (!pq.isEmpty()) {
-            val curPair = pq.poll()
-            if (group.isNotEmpty() && !curStr.equals(curPair.first)) {
-                result.add(group.toList())
-                group.clear()
-            }
-
-            group.add(strs[curPair.second])
-            curStr = curPair.first
+        for(values in map.values) {
+            result.add(values)
         }
-        if(group.isNotEmpty()) result.add(group.toList())
         return result
     }
 }
