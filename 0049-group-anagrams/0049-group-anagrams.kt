@@ -1,5 +1,3 @@
-import java.util.PriorityQueue
-
 class Solution {
     fun groupAnagrams(strs: Array<String>): List<List<String>> {
         val map = mutableMapOf<String, MutableList<String>>()
