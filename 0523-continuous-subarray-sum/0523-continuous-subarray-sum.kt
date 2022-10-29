@@ -6,7 +6,7 @@ class Solution {
             sum += nums[i]
             sum %= k
 
-            if (sum == 0 && i != 0) return true
+            if (sum == 0 && i > 0) return true
             if (i - (map[sum] ?: i) > 1) return true
             if(!map.containsKey(sum)) map[sum] = i
         }
