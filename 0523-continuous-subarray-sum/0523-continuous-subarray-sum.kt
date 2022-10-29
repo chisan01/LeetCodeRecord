@@ -1,14 +1,14 @@
 class Solution {
     fun checkSubarraySum(nums: IntArray, k: Int): Boolean {
-        val map = mutableMapOf<Int, Int>(Pair(0, -1))
+        val map = mutableMapOf<Int, Int>()
         var sum = 0
         for (i in nums.indices) {
             sum += nums[i]
-            if(k != 0) sum %= k
+            sum %= k
 
-            if (map.containsKey(sum)) {
-                if(i - map[sum]!! > 1) return true
-            } else map[sum] = i
+            if (sum == 0 && i != 0) return true
+            if (map.containsKey(sum) && i - (map[sum] ?: i) > 1) return true
+            if(!map.containsKey(sum)) map[sum] = i
         }
         return false
     }
