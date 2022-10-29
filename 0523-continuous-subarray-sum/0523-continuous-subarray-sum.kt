@@ -7,7 +7,7 @@ class Solution {
             sum %= k
 
             if (sum == 0 && i != 0) return true
-            if (map.containsKey(sum) && i - (map[sum] ?: i) > 1) return true
+            if (i - (map[sum] ?: i) > 1) return true
             if(!map.containsKey(sum)) map[sum] = i
         }
         return false
