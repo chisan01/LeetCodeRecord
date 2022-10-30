@@ -4,41 +4,58 @@ import java.util.Queue
 const val EMPTY = 0
 const val OBSTACLE = 1
 
+enum class Dir {
+    LEFT, UP, RIGHT, DOWN;
+
+    private val dx = listOf(-1, 0, 1, 0)
+    private val dy = listOf(0, 1, 0, -1)
+
+    fun dx(): Int {
+        return dx[ordinal]
+    }
+
+    fun dy(): Int {
+        return dy[ordinal]
+    }
+}
+
+data class Cor(val y: Int, val x: Int) {
+    fun move(dir: Dir): Cor {
+        val newY = y + dir.dy()
+        val newX = x + dir.dx()
+        return Cor(newY, newX)
+    }
+}
+
 class Solution {
-
-    data class Node(val y: Int, val x: Int, val leftK: Int, val curSteps: Int)
-
     fun shortestPath(grid: Array<IntArray>, k: Int): Int {
 
         val rowSize = grid.size
         val columnSize = grid[0].size
+        val lowerRightCorner = Cor(rowSize - 1, columnSize - 1)
 
-        val dirs = arrayOf(intArrayOf(0, 1), intArrayOf(0, -1), intArrayOf(1, 0), intArrayOf(-1, 0))
+        val q: Queue<Triple<Cor, Int, Int>> = LinkedList()
+        q.add(Triple(Cor(0, 0), k, 0))
+        val isVisit = Array(k + 1) { Array(rowSize) { Array(columnSize) { false } } }
 
-        val q = LinkedList<Node>()
-        q.offer(Node(0, 0, k, 0))
+        while (!q.isEmpty()) {
+            val (curCor, curK, curSteps) = q.poll()
 
-        val isVisit = Array(k + 1) { Array(rowSize) { BooleanArray(columnSize) } }
+            if (isVisit[curK][curCor.y][curCor.x]) continue
+            isVisit[curK][curCor.y][curCor.x] = true
 
-        while (q.isNotEmpty()) {
-            val (curY, curX, curLeftK, curSteps) = q.poll()
+            if (curCor == lowerRightCorner) return curSteps
 
-            if (isVisit[curLeftK][curY][curX]) continue
-            isVisit[curLeftK][curY][curX] = true
+            for (dir in Dir.values()) {
+                val nextCor = curCor.move(dir)
 
-            if (curY == rowSize - 1 && curX == columnSize - 1) return curSteps
+                if (nextCor.y < 0 || nextCor.y >= grid.size || nextCor.x < 0 || nextCor.x >= grid[0].size) continue
 
-            dirs.forEach { dir ->
-                val y = curY + dir[0]
-                val x = curX + dir[1]
-
-                if (y < 0 || y >= grid.size || x < 0 || x >= grid[0].size) return@forEach
-                if (isVisit[curLeftK][y][x]) return@forEach
-
-                if (grid[y][x] == OBSTACLE && curLeftK > 0) {
-                    q.offer(Node(y, x, curLeftK - 1, curSteps + 1))
-                } else if (grid[y][x] == EMPTY) {
-                    q.offer(Node(y, x, curLeftK, curSteps + 1))
+                if (grid[nextCor.y][nextCor.x] == OBSTACLE) {
+                    if (curK <= 0) continue
+                    q.add(Triple(nextCor, curK - 1, curSteps + 1))
+                } else {
+                    q.add(Triple(nextCor, curK, curSteps + 1))
                 }
             }
         }
