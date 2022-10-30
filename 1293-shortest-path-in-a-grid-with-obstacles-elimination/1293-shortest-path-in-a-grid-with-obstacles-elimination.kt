@@ -54,12 +54,10 @@ class Grid(private val grid: Array<IntArray>, private val k: Int) {
         val q: Queue<Triple<Cor, Int, Int>> = LinkedList()
         q.add(Triple(Cor(0, 0), this.k, 0))
         val isVisit = Array(this.k + 1) { Array(rowSize) { Array(columnSize) { false } } }
+        isVisit[k][0][0] = true
 
         while (!q.isEmpty()) {
             val (curCor, curK, curSteps) = q.poll()
-
-            if (isVisit[curK][curCor.y][curCor.x]) continue
-            isVisit[curK][curCor.y][curCor.x] = true
 
             if (curCor == lowerRightCorner) return curSteps
 
@@ -70,9 +68,13 @@ class Grid(private val grid: Array<IntArray>, private val k: Int) {
 
                 if (grid[nextCor.y][nextCor.x] == OBSTACLE) {
                     if (curK <= 0) continue
+                    if (isVisit[curK - 1][nextCor.y][nextCor.x]) continue
                     q.add(Triple(nextCor, curK - 1, curSteps + 1))
+                    isVisit[curK - 1][nextCor.y][nextCor.x] = true
                 } else {
+                    if (isVisit[curK][nextCor.y][nextCor.x]) continue
                     q.add(Triple(nextCor, curK, curSteps + 1))
+                    isVisit[curK][nextCor.y][nextCor.x] = true
                 }
             }
         }
