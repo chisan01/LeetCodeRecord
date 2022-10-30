@@ -19,24 +19,41 @@ enum class Dir {
     }
 }
 
-data class Cor(val y: Int, val x: Int) {
+class Cor(val y: Int, val x: Int) {
     fun move(dir: Dir): Cor {
         val newY = y + dir.dy()
         val newX = x + dir.dx()
         return Cor(newY, newX)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is Cor) return this.x == other.x && this.y == other.y
+        return false
+    }
+
+    override fun toString(): String {
+        return "Cor(x=$x, y=$y)"
+    }
 }
 
-class Solution {
-    fun shortestPath(grid: Array<IntArray>, k: Int): Int {
+class Grid(private val grid: Array<IntArray>, private val k: Int) {
 
-        val rowSize = grid.size
-        val columnSize = grid[0].size
-        val lowerRightCorner = Cor(rowSize - 1, columnSize - 1)
+    private val rowSize = grid.size
+    private val columnSize = grid[0].size
 
+    private val lowerRightCorner = Cor(rowSize - 1, columnSize - 1)
+
+    // dp[leftK][x][y]
+    private val dp = MutableList(k + 1) { MutableList(grid.size) { MutableList(grid[0].size) { -1 } } }
+
+    private fun Cor.isOutside(): Boolean {
+        return this.y < 0 || this.y >= grid.size || this.x < 0 || this.x >= grid[0].size
+    }
+
+    fun shortestPath(): Int {
         val q: Queue<Triple<Cor, Int, Int>> = LinkedList()
-        q.add(Triple(Cor(0, 0), k, 0))
-        val isVisit = Array(k + 1) { Array(rowSize) { Array(columnSize) { false } } }
+        q.add(Triple(Cor(0, 0), this.k, 0))
+        val isVisit = Array(this.k + 1) { Array(rowSize) { Array(columnSize) { false } } }
 
         while (!q.isEmpty()) {
             val (curCor, curK, curSteps) = q.poll()
@@ -49,7 +66,7 @@ class Solution {
             for (dir in Dir.values()) {
                 val nextCor = curCor.move(dir)
 
-                if (nextCor.y < 0 || nextCor.y >= grid.size || nextCor.x < 0 || nextCor.x >= grid[0].size) continue
+                if (nextCor.isOutside()) continue
 
                 if (grid[nextCor.y][nextCor.x] == OBSTACLE) {
                     if (curK <= 0) continue
@@ -60,5 +77,12 @@ class Solution {
             }
         }
         return -1
+    }
+}
+
+class Solution {
+    fun shortestPath(grid: Array<IntArray>, k: Int): Int {
+        val myGrid = Grid(grid, k)
+        return myGrid.shortestPath()
     }
 }
