@@ -9,7 +9,6 @@ class Solution {
                 if(j == 0) linkedList.addFirst(item)
                 else if(linkedList[j] != item) return false
             }
-            linkedList.removeLast()
         }
         return true
     }
