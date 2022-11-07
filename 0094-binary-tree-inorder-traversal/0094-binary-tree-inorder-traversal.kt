@@ -1,9 +1,9 @@
 class Solution {
     fun f(curNode: TreeNode?, result: MutableList<Int>) {
         if(curNode == null) return
-        f(curNode.left, result)
+        curNode.left?.let { f(it, result) }
         result.add(curNode.`val`)
-        f(curNode.right, result)
+        curNode.right?.let { f(it, result) }
     }
 
     fun inorderTraversal(root: TreeNode?): List<Int> {
