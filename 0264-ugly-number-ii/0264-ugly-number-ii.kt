@@ -3,11 +3,14 @@ import java.util.PriorityQueue
 class Solution {
 
     fun nthUglyNumber(n: Int): Int {
+        
+        val primeFactors = listOf(2, 3, 5)
 
+        val uglyNumbers = mutableSetOf<Long>()
+            .apply { add(1) }
+        
         val pq = PriorityQueue<Long> { a, b -> a.compareTo(b) }
-        pq.add(1)
-
-        val uglyNumbers = mutableSetOf<Long>(1)
+            .apply { add(1) }
 
         var uglyNumberCnt = 0
         while (true) {
@@ -16,17 +19,11 @@ class Solution {
 
             if(uglyNumberCnt == n) return curUglyNumber.toInt()
 
-            if(!uglyNumbers.contains(curUglyNumber * 2)) {
-                uglyNumbers.add(curUglyNumber * 2)
-                pq.add(curUglyNumber * 2)
-            }
-            if(!uglyNumbers.contains(curUglyNumber * 3)) {
-                uglyNumbers.add(curUglyNumber * 3)
-                pq.add(curUglyNumber * 3)
-            }
-            if(!uglyNumbers.contains(curUglyNumber * 5)) {
-                uglyNumbers.add(curUglyNumber * 5)
-                pq.add(curUglyNumber * 5)
+            for (primeFactor in primeFactors) {
+                val newUglyNumber = curUglyNumber * primeFactor
+                if(uglyNumbers.contains(newUglyNumber)) continue
+                uglyNumbers.add(newUglyNumber)
+                pq.add(newUglyNumber)
             }
         }
     }
